@@ -81,7 +81,7 @@ class ViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        imageView.image = UIImage(systemName: "sun.min")
+//        imageView.image = UIImage(systemName: "sun.min")
         imageView.tintColor = UIColor(named: K.modeColor)
         imageView.contentMode = .scaleAspectFit
         
@@ -92,8 +92,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        label.font = UIFont(name: K.fontName, size: 100)
-        label.text = "30 C"
+        label.font = UIFont(name: K.fontName, size: 80)
         
         return label
     }()
@@ -102,8 +101,8 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        label.font = UIFont(name: K.fontName, size: 40)
-        label.text = "35 C"
+        label.font = UIFont(name: K.fontName, size: 25)
+//        label.text = "35 C"
         
         return label
     }()
@@ -113,7 +112,7 @@ class ViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
         label.font = UIFont(name: K.fontName, size: 50)
-        label.text = "Kazan"
+//        label.text = "Kazan"
         
         return label
     }()
@@ -153,13 +152,8 @@ class ViewController: UIViewController {
         weatherManager.delegate = self
         locationManager.delegate = self
         
-    }
-    
-    //MARK: - @objc methods
-    
-    @objc func locationPressed(sender: UIButton!) {
-        
-        print("location button tapped")
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
     }
     
     func createConstraints() {
@@ -322,8 +316,9 @@ extension ViewController: WeatherManagerDelegate {
     func didUpdateWeather(weatherManager: WeatherManager, weather: WeatherModel) {
         
         DispatchQueue.main.async {
-            self.cityLabel.text = weather.cityName
-            self.temperatureLabel.text = weather.tempString
+            self.cityLabel.text = (weather.cityName)
+            self.temperatureLabel.text = "\(weather.tempString)°C"
+            self.feelsTemperatureLabel.text = "Feels like \(weather.feelsTempString)°C"
             self.weatherImageView.image = UIImage(systemName: weather.weatherName)
         }
         
@@ -338,7 +333,7 @@ extension ViewController: WeatherManagerDelegate {
 
 extension ViewController: CLLocationManagerDelegate {
     
-    @IBAction func currentLocationButtonPressed(_ sender: UIButton) {
+    @objc func locationPressed(sender: UIButton!) {
         
         locationManager.requestLocation()
     }
